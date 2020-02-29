@@ -1,3 +1,4 @@
+// 【题目】有效的括号 
 // 判断字符串括号是否闭合
 var isValid = function(str) {
   let arr1 = str.split("");

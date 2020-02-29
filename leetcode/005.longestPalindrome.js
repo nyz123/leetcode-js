@@ -1,5 +1,5 @@
 /**
- * 最长回文子串
+ * 【题目】最长回文子串
  */
 var longestPalindrome = function(s) {
     if(s === null || s.length === 0){

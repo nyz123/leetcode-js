@@ -1,5 +1,5 @@
 /**
- * 寻找两个有序数组的中位数
+ * 【题目】寻找两个有序数组的中位数
  */
 var findMedianSortedArrays = function(nums1, nums2) {
     let nums = [].concat(nums1,nums2),mid = nums.length/2.0
