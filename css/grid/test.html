@@ -11,10 +11,12 @@
             width: 700px;
             border: 1px solid #ddd;
             /* grid-template-columns: repeat(3,100px); */
+            /* grid-template-columns: repeat(auto-fill,100px); */
+            grid-template-columns: 100px auto 100px;;
             /* grid-template-columns: 100px 1fr 2fr; */
             /* grid-template-columns: 3fr 2fr minmax(100px, 1fr); */
-            grid-template-columns: [c1] 100px [c2] auto [c3] 100px [c4];
-            grid-template-rows: [r1] 100px [r2] 100px [r3] 100px [r4];
+            /* grid-template-columns: [c1] 100px [c2] auto [c3] 100px [c4];*/
+            grid-template-rows: [r1] 100px [r2] 100px [r3] 100px [r4]; 
             /* grid-column-gap: 10px;
             grid-row-gap: 20px; */
             grid-gap: 20px 10px ;
