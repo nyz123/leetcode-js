@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CSS 水纹波与混合模式</title>
+<style>
+    @charset "utf-8";
+.stuff {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-animation: ouch 7s infinite alternate;
+          animation: ouch 7s infinite alternate;
+  background: radial-gradient(21vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 63vw 89vh, radial-gradient(37vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 5vw 87vh, radial-gradient(64vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 11vw 75vh, radial-gradient(26vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 45vw 17vh, radial-gradient(65vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 54vw 24vh, radial-gradient(61vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 54vw 73vh, radial-gradient(5vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 76vw 61vh, radial-gradient(15vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 98vw 76vh, radial-gradient(51vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 5vw 94vh, radial-gradient(39vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 30vw 74vh, radial-gradient(11vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 27vw 85vh, radial-gradient(37vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 70vw 84vh, radial-gradient(75vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 46vw 43vh, radial-gradient(56vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 96vw 15vh, radial-gradient(25vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 91vw 69vh, radial-gradient(53vw, #ffffff 0%, #333333 50%, #ffffff, #000000, #eeeeee) 95vw 77vh;
+  background-color: #000;
+  background-blend-mode: difference;
+}
+.stuff::before, .stuff::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.stuff::before {
+  background: #eb65e4;
+  mix-blend-mode: color-burn;
+}
+
+@-webkit-keyframes ouch {
+  100% {
+    background-position: 69vw 55vh, 13vw -39vh, 72vw 140vh, 110vw 26vh, -36vw 119vh, 108vw 39vh, 117vw -42vh, -3vw 120vh, 106vw 34vh, 116vw 106vh, -26vw -33vh, 8vw 124vh, 77vw -19vh, 70vw 106vh, 131vw 14vh, 76vw -2vh;
+  }
+}
+
+@keyframes ouch {
+  100% {
+    background-position: 69vw 55vh, 13vw -39vh, 72vw 140vh, 110vw 26vh, -36vw 119vh, 108vw 39vh, 117vw -42vh, -3vw 120vh, 106vw 34vh, 116vw 106vh, -26vw -33vh, 8vw 124vh, 77vw -19vh, 70vw 106vh, 131vw 14vh, 76vw -2vh;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="stuff"></div>
+
+</body>
+</html>

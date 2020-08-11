@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>弹性势能动画(弹力球效果)</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;   
+            height: 100px;
+            font-size: 30px;
+            text-align: center;
+            line-height: 100px;
+            background-color: greenyellow;
+            border-radius: 50%;
+            cursor: move;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<div id="box">弹</div>
+
+<script type="text/javascript">
+    var oDiv = document.getElementById('box');
+    oDiv.addEventListener('mousedown', down, false);
+    // 下面两个事件之所以不注册在box上，而是注册在document，
+    // 是因为鼠标拖拽很可能会出现鼠标脱离物体的情况，
+    // 如果注册在物体上，可能会导致move和up突然监听不到了
+    document.addEventListener('mousemove', move, false);
+    document.addEventListener('mouseup', up, false);
+
+    var ball = {
+        isMouseDown: false,
+        flyTimer : null,
+        dropTimer : null,
+        startX : 0,
+        startY : 0,
+        moveX: 0,
+        moveY: 0,
+        endX : 0,
+        endY : 0,
+        startL : 0,
+        startT : 0,
+        minLeft: 0,
+        maxLeft: 0,
+        minTop: 0,
+        maxTop: 0,
+        flySpeed: 0,
+        dropSpeed: 0
+    };
+
+    function setMinMaxPos (_this) {
+        var _box = _this || oDiv;
+        ball.maxLeft = (document.documentElement.clientWidth || document.body.clientWidth) - _box.offsetWidth;
+        ball.maxTop = (document.documentElement.clientHeight || document.body.clientHeight) - _box.offsetHeight;
+    }
+
+    window.addEventListener("resize",setMinMaxPos);
+
+    function down(e) {
+        ball.isMouseDown = true;
+        ball.startX = ball.moveX = e.clientX;
+        ball.startY = ball.moveY = e.clientY;
+        ball.startL = this.offsetLeft;
+        ball.startT = this.offsetTop;
+
+        setMinMaxPos(this);
+
+        if(ball.flyTimer){
+            window.clearInterval(ball.flyTimer);
+            ball.flyTimer = null;
+        }
+        if(ball.dropTimer){
+            window.clearInterval(ball.dropTimer);
+            ball.dropTimer = null;
+        }
+    }
+    function move(e) {
+        if (!ball.isMouseDown) {
+            return false;
+        }
+        var _this = oDiv;
+        if (ball.endX !== 0 || ball.endY !== 0) {
+            ball.moveX = ball.endX;
+            ball.moveY = ball.endY;
+        }
+
+        var curL = e.clientX - ball.startX + ball.startL;
+        var curT = e.clientY - ball.startY + ball.startT;
+
+        ball.endX = curL < ball.minLeft ? ball.minLeft : (curL > ball.maxLeft ? ball.maxLeft : curL);
+        ball.endY = curT < ball.minTop ? ball.minTop : (curT > ball.maxTop ? ball.maxTop: curT);
+        _this.style.left = ball.endX + 'px';
+        _this.style.top = ball.endY + 'px';
+
+        ball.flySpeed = ball.endX - ball.moveX;
+        ball.dropSpeed = ball.endY - ball.moveY;
+        //console.log(ball.flySpeed);
+    }
+    function up(e) {
+        if (!ball.isMouseDown) {
+            return false;
+        }
+        ball.isMouseDown = false;
+        fly.call(this);
+
+        drop.call(this,e);
+    }
+
+    // dropSpeed初始是0(如果有个往下滑动的过程则会有一个滑动间隔作为初始值)，
+    // dropSpeed每次轮询加10，直到触底，触底后将dropSpeed*-1变成向上运动
+    // dropSpeed向上运动，值为负，轮询一次依然加10，负值加正值，实际在变小，变成0或负数
+    // 循环上面1和2步骤
+    // 如果 弹起的高度不超过增量那么就静止
+    function drop(e) {
+        var _this = oDiv;
+        var dropG = 10; // 下坠增量
+        var dropSpeed = ball.dropSpeed;
+        var dropBottomNum = 0;
+        var curT;
+        ball.dropTimer = setInterval(function () {
+            dropSpeed+=10;
+            curT = _this.offsetTop + dropSpeed;
+            if (curT >= ball.maxTop) {
+                // 触底
+                _this.style.top = ball.maxTop + 'px';
+                dropSpeed *= -1;
+                // 让弹起的高度 下降 
+                //dropS peed = -dropSpeed + parseInt(dropSpeed/6);
+                dropBottomNum ++;
+                console.log(dropBottomNum,dropSpeed);
+                if (dropSpeed < 0 && dropSpeed >= -10) {
+                    clearInterval(ball.dropTimer);
+                    ball.dropTimer = null;
+                }
+            } else {
+                _this.style.top = curT + 'px';
+            }
+        }, 1000/50);
+    }
+
+    // 模拟水平惯性移动，和下坠加速度类似，物体当前的left值 + 增量值，如果需要反弹，则将left值乘于-1
+    // 和下坠不同，水平惯性的增量是受摩擦外力影响，应该是越来越小，最后停止的
+    function fly() {
+        var _this = oDiv;
+        var flyMocha = 0.95;
+        var flySpeed = ball.flySpeed; // 水平惯性增量
+        var flyBorderNum = 0; //碰撞边框次数
+        var curL;
+        ball.flyTimer = setInterval(function () {
+            if (Math.abs(flySpeed) < 0.3) {
+                // 水平惯性小于0.3像素
+                clearInterval(ball.flyTimer);
+                ball.flyTimer = null;
+            }
+            flySpeed *= flyMocha; // 每次轮询惯性速度只有上一次的0.95
+            curL = _this.offsetLeft + flySpeed;
+            if (curL <= ball.minLeft) {
+                _this.style.left = 0;
+                flySpeed *= -1;
+            } else if (curL >= ball.maxLeft) {
+                _this.style.left = ball.maxLeft + 'px';
+                flySpeed *= -1;
+            }
+            else {
+                _this.style.left = curL + 'px';
+            }
+        }, 1000/50);
+    }
+</script>
+</body>
+</html>
