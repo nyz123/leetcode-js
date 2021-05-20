@@ -1,0 +1,3 @@
+var canCross = function(stones) {
+
+};

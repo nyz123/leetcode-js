@@ -28,21 +28,21 @@ var search = function(nums, target) {
     r = nums.length - 1;
   while (l <= r) {
     let mid = Math.ceil((l + r) / 2);
-    if (nums[mid] == target) return mid;
-    else if (nums[l] <= nums[mid]) {
-      if (nums[l] <= target && nums[mid] > target) {
-        r = mid - 1;
-      } else {
-        l = mid + 1;
-      }
-    } else {
-      if (target >= nums[l] || target < nums[mid]) {
-        r = mid - 1;
-      } else {
-        l = mid + 1;
-      }
+    if(nums[mid]==target) return mid;
+    else if(nums[l]<=nums[mid]){
+        if(nums[l]<=target&&nums[mid]>target){
+            r = mid-1;
+        }else{
+            l = mid+1
+        }
+    }else{
+        if(target>=nums[l]||target<nums[mid]){
+            r=mid-1
+        }else{
+            l=mid+1
+        }
     }
   }
   return -1;
 };
-console.log(search([7, 8, 1, 2, 3, 4, 5, 6], 2));
+console.log(search([1,0,1,1,1], 0));
