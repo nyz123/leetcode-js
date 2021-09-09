@@ -9,6 +9,8 @@ function partition(arr,l,r){
     }
     arr[l]=key
     console.log(arr)
+
+    
     return l
 }
 function sort(arr,l,r){
